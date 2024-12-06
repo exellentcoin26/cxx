@@ -9,14 +9,6 @@ fn main() {
     let manifest_dir_opt = env::var_os("CARGO_MANIFEST_DIR").map(PathBuf::from);
     let manifest_dir = manifest_dir_opt.as_deref().unwrap_or(Path::new(""));
 
-    cc::Build::new()
-        .file(manifest_dir.join("src/cxx.cc"))
-        .cpp(true)
-        .cpp_link_stdlib(None) // linked via link-cplusplus crate
-        .std(cxxbridge_flags::STD)
-        .warnings_into_errors(cfg!(deny_warnings))
-        .compile("cxxbridge1");
-
     println!("cargo:rerun-if-changed=src/cxx.cc");
     println!("cargo:rerun-if-changed=include/cxx.h");
     println!("cargo:rustc-cfg=built_with_cargo");
